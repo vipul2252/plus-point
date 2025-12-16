@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Men's Fashion Store - Shirts, Pants & Blazers</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 28px;
+            margin: 0;
+        }
+
+        .cart-icon-wrapper {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .cart-icon-wrapper:hover {
+            transform: scale(1.1);
+        }
+
+        .cart-icon-wrapper .cart-icon {
+            font-size: 36px;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #f5576c;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            animation: pulse 0.3s ease;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .product-image .icon-fallback {
+            position: relative;
+            z-index: 1;
+        }
+
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .product-price {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .discount-price {
+            font-size: 24px;
+            color: #11998e;
+            font-weight: bold;
+        }
+
+        .original-price {
+            font-size: 18px;
+            color: #999;
+            text-decoration: line-through;
+        }
+
+        .discount-badge {
+            background: #f5576c;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .product-description {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .add-to-cart:hover {
+            opacity: 0.9;
+        }
+
+        .cart-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-top: 30px;
+        }
+
+        .cart-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .remove-btn {
+            background: #f5576c;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .cart-total {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #667eea;
+            text-align: right;
+        }
+
+        .cart-total h3 {
+            font-size: 24px;
+            color: #333;
+        }
+
+        .checkout-form {
+            margin-top: 25px;
+            display: grid;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .checkout-btn {
+            padding: 15px;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .checkout-btn:hover {
+            opacity: 0.9;
+        }
+
+        .checkout-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .empty-cart {
+            text-align: center;
+            color: #666;
+            padding: 30px;
+        }
+
+        .payment-info {
+            background: #f0f7ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .payment-info p {
+            color: #333;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .products {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .cart-icon-wrapper {
+                align-self: flex-end;
+                position: absolute;
+                right: 20px;
+                top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🛍️ Men's Fashion Store</h1>
+        <div class="cart-icon-wrapper" onclick="scrollToCart()">
+            <span class="cart-icon">🛒</span>
+            <span class="cart-badge" id="cartBadge">0</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="products" id="productsContainer"></div>
+
+        <div class="cart-section">
+            <h2>🛒 Your Cart</h2>
+            <div id="cartItems"></div>
+            <div class="cart-total">
+                <h3>Total: ₹<span id="totalAmount">0</span></h3>
+            </div>
+
+            <div class="payment-info">
+                <p>💰 Payment Method: Cash on Delivery (COD)</p>
+            </div>
+
+            <form class="checkout-form" id="checkoutForm">
+                <div class="form-group">
+                    <label>Your Name *</label>
+                    <input type="text" id="customerName" required placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label>Mobile Number *</label>
+                    <input type="tel" id="customerPhone" required placeholder="10-digit mobile number" pattern="[0-9]{10}">
+                </div>
+                <div class="form-group">
+                    <label>Delivery Address *</label>
+                    <textarea id="customerAddress" required placeholder="Enter complete delivery address"></textarea>
+                </div>
+                <button type="submit" class="checkout-btn" id="checkoutBtn">
+                    Place Order (Cash on Delivery)
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ⚠️ IMPORTANT: Apna WhatsApp number yahan dalein (91 ke baad apna 10 digit number)
+        const WHATSAPP_NUMBER = '919876543210'; // Example: 919876543210
+
+        const products = [
+            {
+                id: 1,
+                name: 'Formal Shirt',
+                price: 899,
+                category: 'shirt',
+                icon: '👔',
+                image: 'https://example.com/shirt1.jpg', // 👈 Yahan image URL dalein
+                description: 'Premium cotton formal shirt',
+                sizes: ['S', 'M', 'L', 'XL', 'XXL']
+            },
+            {
+                id: 2,
+                name: 'Casual Shirt',
+                price: 699,
+                category: 'shirt',
+                icon: '👕',
+                image: 'https://example.com/shirt2.jpg', // 👈 Yahan image URL dalein
+                description: 'Comfortable casual wear',
+                sizes: ['S', 'M', 'L', 'XL', 'XXL']
+            },
+            {
+                id: 3,
+                name: 'Formal Pants',
+                price: 1299,
+                category: 'pants',
+                icon: '👖',
+                image: 'https://example.com/pants1.jpg', // 👈 Yahan image URL dalein
+                description: 'Slim fit formal trousers',
+                sizes: ['28', '30', '32', '34', '36', '38']
+            },
+            {
+                id: 4,
+                name: 'Casual Jeans',
+                price: 1499,
+                category: 'pants',
+                icon: '👖',
+                image: 'https://example.com/jeans1.jpg', // 👈 Yahan image URL dalein
+                description: 'Denim jeans - comfort fit',
+                sizes: ['28', '30', '32', '34', '36', '38']
+            },
+            {
+                id: 5,
+                name: 'Classic Blazer',
+                price: 2999,
+                category: 'blazer',
+                icon: '🧥',
+                image: 'https://example.com/blazer1.jpg', // 👈 Yahan image URL dalein
+                description: 'Premium wool blend blazer',
+                sizes: ['S', 'M', 'L', 'XL', 'XXL']
+            },
+            {
+                id: 6,
+                name: 'Party Blazer',
+                price: 3499,
+                category: 'blazer',
+                icon: '🧥',
+                image: 'https://example.com/blazer2.jpg', // 👈 Yahan image URL dalein
+                description: 'Designer party wear blazer',
+                sizes: ['S', 'M', 'L', 'XL', 'XXL']
+            },
+            // 👇 NAYA PRODUCT ADD KARNE KE LIYE YAHAN SE COPY KAREIN
+            {
+                id: 7,  // ⚠️ Har naye product ki ID unique honi chahiye
+                name: 'Cotton T-Shirt',  // Product ka naam
+                price: 499,  // Price (₹ mein)
+                category: 'shirt',  // Category: 'shirt', 'pants', ya 'blazer'
+                icon: '👕',  // Emoji icon (koi bhi emoji use kar sakte hain)
+                description: 'Soft cotton casual t-shirt',  // Product description
+                sizes: ['S', 'M', 'L', 'XL', 'XXL']  // Available sizes
+            }
+            // 👆 Aur products add karne ke liye comma lagake yahan copy-paste karein
+        ];
+
+        let cart = [];
+
+        function scrollToCart() {
+            const cartSection = document.querySelector('.cart-section');
+            cartSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function updateCartBadge() {
+            const badge = document.getElementById('cartBadge');
+            badge.textContent = cart.length;
+            
+            // Animation trigger
+            badge.style.animation = 'none';
+            setTimeout(() => {
+                badge.style.animation = 'pulse 0.3s ease';
+            }, 10);
+        }
+
+        function renderProducts() {
+            const container = document.getElementById('productsContainer');
+            container.innerHTML = products.map(product => {
+                const discount = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
+                
+                return `
+                <div class="product-card">
+                    <div class="product-image">
+                        ${product.image ? 
+                            `<img src="${product.image}" alt="${product.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="icon-fallback" style="display:none;">${product.icon}</div>` 
+                            : 
+                            `<div class="icon-fallback">${product.icon}</div>`
+                        }
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-price">
+                            <span class="discount-price">₹${product.price}</span>
+                            <span class="original-price">₹${product.originalPrice}</span>
+                            <span class="discount-badge">${discount}% OFF</span>
+                        </div>
+                        <div class="product-description">${product.description}</div>
+                        <button class="add-to-cart" onclick="addToCart(${product.id})">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            
+            const cartItem = {
+                ...product,
+                cartId: Date.now()
+            };
+            
+            cart.push(cartItem);
+            updateCartBadge();
+            renderCart();
+            alert(`${product.name} added to cart!`);
+        }
+
+        function removeFromCart(cartId) {
+            cart = cart.filter(item => item.cartId !== cartId);
+            updateCartBadge();
+            renderCart();
+        }
+
+        function renderCart() {
+            const cartContainer = document.getElementById('cartItems');
+            const totalAmount = document.getElementById('totalAmount');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+
+            if (cart.length === 0) {
+                cartContainer.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
+                totalAmount.textContent = '0';
+                checkoutBtn.disabled = true;
+                return;
+            }
+
+            checkoutBtn.disabled = false;
+
+            cartContainer.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <div class="cart-item-info">
+                        <strong>${item.name}</strong><br>
+                        ₹${item.price} <span style="color: #999; text-decoration: line-through; font-size: 14px;">₹${item.originalPrice}</span>
+                    </div>
+                    <button class="remove-btn" onclick="removeFromCart(${item.cartId})">
+                        Remove
+                    </button>
+                </div>
+            `).join('');
+
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            totalAmount.textContent = total;
+        }
+
+        document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+
+            const name = document.getElementById('customerName').value;
+            const phone = document.getElementById('customerPhone').value;
+            const address = document.getElementById('customerAddress').value;
+
+            // Order details create karna
+            const orderDetails = cart.map((item, index) => 
+                `${index + 1}. ${item.name} - ₹${item.price}`
+            ).join('%0A');
+
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+
+            // WhatsApp message format
+            const message = `*New Order Received!*%0A%0A` +
+                `*Customer Details:*%0A` +
+                `Name: ${name}%0A` +
+                `Phone: ${phone}%0A` +
+                `Address: ${address}%0A%0A` +
+                `*Order Items:*%0A${orderDetails}%0A%0A` +
+                `*Total Amount: ₹${total}*%0A` +
+                `*Payment: Cash on Delivery*`;
+
+            // WhatsApp link
+            const whatsappURL = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+
+            // WhatsApp open karna
+            window.open(whatsappURL, '_blank');
+
+            // Success message
+            alert('Order placed successfully! Order details WhatsApp par send ho gayi hain.');
+
+            // Cart clear karna
+            cart = [];
+            renderCart();
+            document.getElementById('checkoutForm').reset();
+        });
+
+        // Initial render
+        renderProducts();
+        renderCart();
+        updateCartBadge();
+    </script>
+</body>
+</html>
